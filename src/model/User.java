@@ -7,14 +7,18 @@ package model;
 
 import java.sql.*;
 /**
- *
- * @author UG
+ * Kelas yang mengatur proses login
+ * @author Arjun Hamdalah
  */
 public class User implements Login {
     private Connection con;
     private int id;
     private Boolean hasil_login = false;
-
+    /**
+     * Metode untuk melakukan login
+     * @param username String untuk username
+     * @param password String untuk password
+     */
     @Override
     public boolean login(String username, String password) {
         
@@ -37,7 +41,6 @@ public class User implements Login {
                 return false;
             } else {
                 if (rs.getString("password").equals(password)) {
-                    //System.out.println("Login Succsess");
                     hasil_login = true;
                 }
             }

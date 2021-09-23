@@ -7,8 +7,8 @@ package model;
 
 import java.sql.SQLException;
 /**
- *
- * @author UG
+ * Interface berisi metode login
+ * @author Arjun
  */
 public interface Login {
     boolean login(String username, String password);

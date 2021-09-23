@@ -4,20 +4,24 @@
  * and open the template in the editor.
  */
 package model;
-/**
- *
- * @author UG
- */
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
+/**
+ * Kelas untuk menghubungkan koneksi ke MySQL
+ * @author Arjun Hamdalah
+ */
 public class Koneksi {
     private static final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost/tokobuku";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
     private static Connection con;
-    
+    /**
+     * Metode untuk memulai koneksi ke MySQL yang mengembalikan variabel con yang berisi koneksi
+     */
     public static Connection getConnection() {
         try {
             Class.forName(DRIVER_NAME);
