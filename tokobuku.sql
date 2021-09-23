@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 22, 2021 at 10:34 AM
+-- Generation Time: Sep 23, 2021 at 10:53 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -42,7 +42,8 @@ CREATE TABLE `buku` (
 --
 
 INSERT INTO `buku` (`id_buku`, `judul`, `stok`, `harga`, `created_at`) VALUES
-(1, 'Belajar Java Untuk Pemula', 10, 50000, '2021-09-22 08:03:55');
+(1, 'Belajar Java Untuk Pemula', 9, 50000, '2021-09-22 08:03:55'),
+(2, 'Matematika Untuk SMP', 13, 25000, '2021-09-23 06:26:09');
 
 -- --------------------------------------------------------
 
@@ -77,6 +78,25 @@ CREATE TABLE `transaksi` (
   `metode` enum('tunai','non-tunai') NOT NULL,
   `waktu` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `transaksi`
+--
+
+INSERT INTO `transaksi` (`id_transaksi`, `id_buku`, `id_pembeli`, `metode`, `waktu`) VALUES
+(1, 1, 1, 'non-tunai', '2021-09-23 06:07:58'),
+(2, 1, 2, 'tunai', '2021-09-23 06:10:35'),
+(3, 2, 2, 'non-tunai', '2021-09-23 08:42:08');
+
+--
+-- Triggers `transaksi`
+--
+DELIMITER $$
+CREATE TRIGGER `Kurang stok` BEFORE INSERT ON `transaksi` FOR EACH ROW UPDATE buku SET
+buku.stok = buku.stok - 1
+where buku.id_buku = id_buku
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -118,8 +138,8 @@ ALTER TABLE `pembeli`
 --
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`id_transaksi`),
-  ADD KEY `id_buku` (`id_buku`,`id_pembeli`),
-  ADD KEY `id_pembeli` (`id_pembeli`);
+  ADD KEY `transaksi_ibfk_2` (`id_pembeli`),
+  ADD KEY `id_buku` (`id_buku`) USING BTREE;
 
 --
 -- Indexes for table `users`
@@ -135,7 +155,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `buku`
 --
 ALTER TABLE `buku`
-  MODIFY `id_buku` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_buku` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `pembeli`
@@ -147,7 +167,7 @@ ALTER TABLE `pembeli`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -163,8 +183,8 @@ ALTER TABLE `users`
 -- Constraints for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_buku`) REFERENCES `buku` (`id_buku`),
-  ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`id_pembeli`) REFERENCES `pembeli` (`id_pembeli`);
+  ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_buku`) REFERENCES `buku` (`id_buku`) ON DELETE CASCADE,
+  ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`id_pembeli`) REFERENCES `pembeli` (`id_pembeli`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
